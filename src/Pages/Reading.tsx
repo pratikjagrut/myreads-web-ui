@@ -14,7 +14,7 @@ const Reading = () => {
             'books', 
             getBooks
     )
-    console.log(data)
+    
     let page
     if (data?.map === undefined) {
         page = (

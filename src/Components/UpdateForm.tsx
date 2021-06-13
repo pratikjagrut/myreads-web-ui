@@ -1,8 +1,9 @@
 import { useState, SyntheticEvent } from "react";
 
-const UpdateForm = () => {
+const UpdateForm = (props: {bookId: string}) => {
     const [bookStatus, setBookStatus] = useState('reading')
-    const [error, setError] = useState(<div></div>)
+    const [error, setError] = useState(<></>)
+    const bookId = props.bookId
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -12,12 +13,13 @@ const UpdateForm = () => {
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify({
-                bookStatus                
+                "status": bookStatus,
+                "id": bookId
             })
         });
 
         const content = await response.json();
-        console.log(content)
+        console.log(bookStatus)
 
         if (content.status !== 200) {
             setError((
@@ -34,13 +36,15 @@ const UpdateForm = () => {
         }
     }
 
-
     return (
         <div className="row">
             <div className="col">
-            <form className="row g-3" onSubmit={submit}>
+                {error}
+                <form className="row g-3" onSubmit={submit}>
                     <div className="col-md-6">
-                    <select className="form-select" defaultValue="reading" required>
+                    <select className="form-select" defaultValue="reading" required
+                        onChange={e => setBookStatus(e.target.value)}
+                    >
                         <option value="reading">Reading</option>
                         <option value="finished">Finished</option>
                         <option value="wishlist">Wishlist</option>

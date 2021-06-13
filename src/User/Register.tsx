@@ -6,7 +6,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
-    const [error, setError] = useState(<div></div>)
+    const [error, setError] = useState(<></>)
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -15,9 +15,9 @@ const Register = () => {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-                name,
-                email,
-                password
+                "name": name,
+                "email": email,
+                "password": password
             })
         });
 
@@ -32,7 +32,7 @@ const Register = () => {
         } else {
             setRedirect(true)
             setError((
-                <div></div>
+                <></>
             ))
         }
         setRedirect(true);

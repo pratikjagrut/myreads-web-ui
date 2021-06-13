@@ -5,7 +5,7 @@ const Login = (props: { setStatus: (status: number) => void }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [redirect, setRedirect] = useState(false)
-    const [error, setError] = useState(<div></div>)
+    const [error, setError] = useState(<></>)
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
@@ -15,8 +15,8 @@ const Login = (props: { setStatus: (status: number) => void }) => {
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify({
-                email,
-                password
+                "email": email,
+                "password": password
             })
         })
 
@@ -32,7 +32,7 @@ const Login = (props: { setStatus: (status: number) => void }) => {
             setRedirect(true)
             props.setStatus(200)
             setError((
-                <div></div>
+                <></>
             ))
         }
     }

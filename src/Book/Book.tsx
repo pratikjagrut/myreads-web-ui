@@ -9,7 +9,8 @@ export type BookType  = {
     name: string,
     image: string,
     userid: string,
-    status: string
+    status: string,
+    author: string
 }
 
 const Book = (props: {book: BookType}) => {
@@ -20,7 +21,8 @@ const Book = (props: {book: BookType}) => {
         <Wrapper>
             {/* <img src="sj.jpg" className="img-thumbnail" alt={props.book.name} /> */}
             <div>
-                <h5><b><i>Title: {props.book.name}</i></b></h5>
+                <h5><b><i>{props.book.name}</i></b></h5>
+                <b><i>By: {props.book.author}</i></b>
                 <p>Status: {props.book.status}</p>
             </div>
             <MyModal show={show} setShow={setShow} book={props.book}/>

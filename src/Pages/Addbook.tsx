@@ -1,10 +1,11 @@
 import { useState, SyntheticEvent } from "react";
 const AddBook = () => {
     const [name, setName] = useState('')
+    const [author, setAuthor] = useState('')
     const [status, setStatus] = useState('reading')
     // const [image, setImage] = useState<FileList | null>()
     // const [redirect, setRedirect] = useState(false);
-    const [error, setError] = useState(<div></div>)
+    const [error, setError] = useState(<></>)
     // const [errMsg, setErrMsg] = useState('')
 
     const submit = async (e: SyntheticEvent) => {
@@ -15,9 +16,11 @@ const AddBook = () => {
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
             body: JSON.stringify({
-                name,
-                status,
-                // image,
+                "name": name,
+                "author": author,
+                "status": status,
+                //"image": image,
+                
             })
         });
 
@@ -54,12 +57,18 @@ const AddBook = () => {
                             />
                         </div>
                         <div className="col-md-6">
+                            <label className="form-label">Author</label>
+                            <input type="text" className="form-control"
+                                onChange={e => setAuthor(e.target.value)}
+                            />
+                        </div>
+                        <div className="col-md-12">
                         <label className="form-label">Reading status</label>
                         <select className="form-select" defaultValue="reading" required 
                             onChange={e => setStatus(e.target.value)}>
                             <option value="reading">Reading</option>
                             <option value="finished">Finished</option>
-                            <option value="whishlist">Want to read</option>
+                            <option value="whishlist">Wishlist</option>
                         </select>
                         </div>
                         {/* <div className="col-12">

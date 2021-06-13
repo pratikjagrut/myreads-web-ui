@@ -9,7 +9,7 @@ const getBooks = async (): Promise<BookType[]> =>
     })).json()
 
 const Finished = () => {
-
+    
     const { data } = useQuery<BookType[]>(
             'books', 
             getBooks
