@@ -1,12 +1,11 @@
 import { useState, SyntheticEvent } from "react"
 import { Redirect } from "react-router"
 
-const Login = (props: { setName: (name: string) => void }) => {
+const Login = (props: { setStatus: (status: number) => void }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [redirect, setRedirect] = useState(false)
-    const [error, setError] = useState(false)
-    let errMsg;
+    const [error, setError] = useState(<div></div>)
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
@@ -22,13 +21,19 @@ const Login = (props: { setName: (name: string) => void }) => {
         })
 
         const content = await response.json()
-        console.log(content)
         
-        if (content.name !== undefined){
-            setRedirect(true)
-            props.setName(content.name)
+        if (content.status !== 200) {
+            setError((
+                <div className="alert alert-danger" role="alert">
+                    {content.message}
+                </div>
+            ))
         } else {
-            setError(true)
+            setRedirect(true)
+            props.setStatus(200)
+            setError((
+                <div></div>
+            ))
         }
     }
 
@@ -36,17 +41,9 @@ const Login = (props: { setName: (name: string) => void }) => {
         return <Redirect to="/home"/>
     }
 
-    if (error) {
-        errMsg = (
-            <div className="alert alert-danger" role="alert">
-                Login failed.
-            </div>
-        )
-    } 
-
     return (
         <div className="form-signin">
-            {errMsg}
+            {error}
             <form onSubmit={submit}>
             <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
             <div className="form-floating">

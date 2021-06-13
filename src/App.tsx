@@ -8,11 +8,11 @@ import Register from "./User/Register";
 import Login from "./User/Login";
 import Reading from './Pages/Reading';
 import Finished from './Pages/Finished';
-import ReadList from './Pages/ReadList';
-import AddBook from './Pages/Addbook'
+import Wishlist from './Pages/Wishlist';
+import AddBook from './Pages/Addbook';
 
 function App() {
-    const [name, setName] = useState('');
+    const [status, setStatus] = useState(404);
     // const [auth, setAuth] = useState(false)
 
     useEffect(() => {
@@ -24,7 +24,7 @@ function App() {
                 });
 
                 const content = await response.json();
-                setName(content.name)
+                setStatus(content.status)
             }
         )();
     });
@@ -32,12 +32,12 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter>
-                <Nav name={name} setName={setName}/>
+                <Nav status={status} setStatus={setStatus}/>
 
-                <Route path="/" exact component={() => <Login setName={setName}/>}/>
-                <Route path="/home" component={() => <Home />}/>
+                <Route path="/" exact component={() => <Login setStatus={setStatus}/>}/>
+                <Route path="/home" component={Home}/>
                 <Route path="/register" component={Register}/>
-                <Route path="/readlist" component={ReadList}/>
+                <Route path="/wishlist" component={Wishlist}/>
                 <Route path="/finished" component={Finished}/>
                 <Route path="/reading" component={Reading}/>
                 <Route path="/addbook" component={AddBook}/>

@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 
-const Nav = (props: { name: string, setName: (name: string) => void }) => {
+const Nav = (props: { status: number, setStatus: (status: number) => void }) => {
     const logout = async () => {
         await fetch('http://localhost:8000/api/logout', {
             method: 'POST',
@@ -8,12 +8,12 @@ const Nav = (props: { name: string, setName: (name: string) => void }) => {
             credentials: 'include',
         });
 
-        props.setName("");
+        props.setStatus(404);
     }
 
     let menu;
 
-    if (props.name === undefined) {
+    if (props.status !== 200) {
         menu = (
             <div className="collapse navbar-collapse" id="navbarCollapse">
                 <ul className="navbar-nav ms-auto">
@@ -37,7 +37,7 @@ const Nav = (props: { name: string, setName: (name: string) => void }) => {
                         <Link to="/reading" className="nav-link" >Reading</Link>
                     </li>
                     <li className="nav-item">
-                        <Link to="/readlist" className="nav-link">Want to read</Link>
+                        <Link to="/wishlist" className="nav-link">Wishlist</Link>
                     </li>
                     <li className="nav-item">
                         <Link to="/finished" className="nav-link">Finished</Link>

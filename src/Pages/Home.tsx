@@ -10,15 +10,21 @@ const getBooks = async (): Promise<BookType[]> =>
 
 const Home = () => {
 
-    const { data } = useQuery<BookType[]>(
+    const { data } = useQuery<BookType[] | undefined>(
             'books', 
             getBooks
+    )
+    
+    let page
+    
+     if (data?.map === undefined) {
+        page = (
+            <h3 style={{color: "red", textAlign: "center"}}>
+                Empty bookshelf
+            </h3>
         )
-      console.log(data)
-      
-   
-    return (
-        <div>
+    } else {
+        page = (
             <Grid container spacing={2}>
                 {data?.map(book => (
                 <Grid item key={book.id} xs={12} sm={2}>
@@ -26,6 +32,12 @@ const Home = () => {
                 </Grid>
                 ))}
             </Grid>
+        )
+    }
+
+    return (
+        <div>
+            {page}
         </div>
     )
 }

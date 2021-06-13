@@ -13,19 +13,31 @@ const Finished = () => {
     const { data } = useQuery<BookType[]>(
             'books', 
             getBooks
+    )
+    
+    let page
+    
+     if (data?.map === undefined) {
+        page = (
+            <h3 style={{color: "red", textAlign: "center"}}>
+                Empty bookshelf
+            </h3>
         )
-      console.log(data)
-      
-   
-    return (
-        <div>
+    } else {
+        page = (
             <Grid container spacing={2}>
                 {data?.map(book => (
-                <Grid item key={book.id} xs={12} sm={2}>
+                <Grid item key={book.id} xs={6} sm={2}>
                     <Book book={book}/>
                 </Grid>
                 ))}
             </Grid>
+        )
+    }
+
+    return (
+        <div>
+            {page}
         </div>
     )
 }

@@ -6,11 +6,12 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
+    const [error, setError] = useState(<div></div>)
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        await fetch('http://localhost:8000/api/register', {
+       const response = await fetch('http://localhost:8000/api/register', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -20,6 +21,20 @@ const Register = () => {
             })
         });
 
+        const content = await response.json()
+
+        if (content.status !== 200) {
+            setError((
+                <div className="alert alert-danger" role="alert">
+                    {content.message}
+                </div>
+            ))
+        } else {
+            setRedirect(true)
+            setError((
+                <div></div>
+            ))
+        }
         setRedirect(true);
     }
 
@@ -29,6 +44,7 @@ const Register = () => {
 
     return (
         <div className="form-signin">
+            {error}
             <h1 className="h3 mb-3 fw-normal">Please Register</h1>
             <form onSubmit={submit}>
                 <div className="form-floating">
