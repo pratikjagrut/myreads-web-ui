@@ -4,9 +4,7 @@ const AddBook = () => {
     const [author, setAuthor] = useState('')
     const [status, setStatus] = useState('reading')
     // const [image, setImage] = useState<FileList | null>()
-    // const [redirect, setRedirect] = useState(false);
     const [error, setError] = useState(<></>)
-    // const [errMsg, setErrMsg] = useState('')
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -52,13 +50,13 @@ const AddBook = () => {
                     <form className="row g-3" onSubmit={submit}>
                         <div className="col-md-6">
                             <label className="form-label">Book Name</label>
-                            <input type="text" className="form-control"
+                            <input type="text" className="form-control" required
                                 onChange={e => setName(e.target.value)}
                             />
                         </div>
                         <div className="col-md-6">
                             <label className="form-label">Author</label>
-                            <input type="text" className="form-control"
+                            <input type="text" className="form-control" required
                                 onChange={e => setAuthor(e.target.value)}
                             />
                         </div>
@@ -68,7 +66,7 @@ const AddBook = () => {
                             onChange={e => setStatus(e.target.value)}>
                             <option value="reading">Reading</option>
                             <option value="finished">Finished</option>
-                            <option value="whishlist">Wishlist</option>
+                            <option value="wishlist">Wishlist</option>
                         </select>
                         </div>
                         {/* <div className="col-12">

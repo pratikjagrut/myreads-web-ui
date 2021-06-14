@@ -5,6 +5,7 @@ import UpdateForm from '../Components/UpdateForm'
 
 const MyModal = (props: {show: boolean, book: BookType, setShow: (status: boolean) => void }) => {
     const handleClose = () => props.setShow(false);
+    const [reload, setReload] = useState(false)
     const [error, setError] = useState(<></>)
     const bookId = props.book.id
     const bookName = props.book.name
@@ -12,7 +13,8 @@ const MyModal = (props: {show: boolean, book: BookType, setShow: (status: boolea
     const deleteBook = async (e: SyntheticEvent) => {
       e.preventDefault()
 
-      const response = await fetch('http://localhost:8000/api/books/deletebook', {
+      if (window.confirm("Are you sure?")) {
+        const response = await fetch('http://localhost:8000/api/books/deletebook', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -30,6 +32,7 @@ const MyModal = (props: {show: boolean, book: BookType, setShow: (status: boolea
                     {content.message}
                 </div>
             ))
+            window.location.reload()
         } else {
             setError((
                 <div className="alert alert-warning" role="alert">
@@ -37,6 +40,11 @@ const MyModal = (props: {show: boolean, book: BookType, setShow: (status: boolea
                 </div>
             ))
         }
+      }
+
+      if (reload) {
+        window.location.reload()
+      }
     }
 
     return (
@@ -55,7 +63,7 @@ const MyModal = (props: {show: boolean, book: BookType, setShow: (status: boolea
           {error}
             <b><i>Book Status: {props.book.status.toUpperCase()}</i></b>
             <pre></pre>
-            <UpdateForm bookId={bookId}/>
+            <UpdateForm bookId={bookId} setReload={setReload}/>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={deleteBook}>Delete Book</Button>

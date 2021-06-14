@@ -1,6 +1,6 @@
 import { useState, SyntheticEvent } from "react";
 
-const UpdateForm = (props: {bookId: string}) => {
+const UpdateForm = (props: {bookId: string, setReload: (reload: boolean) => void}) => {
     const [bookStatus, setBookStatus] = useState('reading')
     const [error, setError] = useState(<></>)
     const bookId = props.bookId
@@ -8,31 +8,34 @@ const UpdateForm = (props: {bookId: string}) => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        const response = await fetch('http://localhost:8000/api/books/updatestatus', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-            body: JSON.stringify({
-                "status": bookStatus,
-                "id": bookId
-            })
-        });
+        if (window.confirm(`Do you want to move this book to ${bookStatus}?`)) {
+            const response = await fetch('http://localhost:8000/api/books/updatestatus', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                    "status": bookStatus,
+                    "id": bookId
+                })
+            });
 
-        const content = await response.json();
-        console.log(bookStatus)
+            const content = await response.json();
+            console.log(bookStatus)
 
-        if (content.status !== 200) {
-            setError((
-                <div className="alert alert-danger" role="alert">
-                    {content.message}
-                </div>
-            ))
-        } else {
-            setError((
-                <div className="alert alert-success" role="alert">
-                    {content.message}
-                </div>
-            ))
+            if (content.status !== 200) {
+                setError((
+                    <div className="alert alert-danger" role="alert">
+                        {content.message}
+                    </div>
+                ))
+                props.setReload(true)
+            } else {
+                setError((
+                    <div className="alert alert-success" role="alert">
+                        {content.message}
+                    </div>
+                ))
+            }
         }
     }
 
