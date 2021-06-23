@@ -2,39 +2,29 @@ import { useState, SyntheticEvent } from "react";
 
 const UpdateForm = (props: {bookId: string, setReload: (reload: boolean) => void}) => {
     const [bookStatus, setBookStatus] = useState('reading')
-    const [error, setError] = useState(<></>)
+    // const [error, setError] = useState(<></>)
     const bookId = props.bookId
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
+        const book = new FormData()
+        book.append("id", bookId)
+        book.append("status", bookStatus)
         if (window.confirm(`Do you want to move this book to ${bookStatus}?`)) {
-            const response = await fetch('http://localhost:8000/api/books/updatestatus', {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/updatestatus`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
                 credentials: 'include',
-                body: JSON.stringify({
-                    "status": bookStatus,
-                    "id": bookId
-                })
+                body: book
             });
 
             const content = await response.json();
-            console.log(bookStatus)
 
             if (content.status !== 200) {
-                setError((
-                    <div className="alert alert-danger" role="alert">
-                        {content.message}
-                    </div>
-                ))
-                props.setReload(true)
+                window.alert(content.message)
             } else {
-                setError((
-                    <div className="alert alert-success" role="alert">
-                        {content.message}
-                    </div>
-                ))
+                window.alert(content.message)
+                props.setReload(true)
             }
         }
     }
@@ -42,7 +32,6 @@ const UpdateForm = (props: {bookId: string, setReload: (reload: boolean) => void
     return (
         <div className="row">
             <div className="col">
-                {error}
                 <form className="row g-3" onSubmit={submit}>
                     <div className="col-md-6">
                     <select className="form-select" defaultValue="reading" required

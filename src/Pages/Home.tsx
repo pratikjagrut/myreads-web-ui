@@ -3,28 +3,45 @@ import { useQuery } from "react-query";
 import Book, { BookType } from '../Book/Book'
 
 const getBooks = async (): Promise<BookType[]> => 
-    await (await fetch('http://localhost:8000/api/books/all', {
+    await (await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/all`, {
         headers: {'Content-Type': 'application/json'},
         credentials: 'include',
-    })).json()
+ })).json()
 
 const Home = () => {
 
-    const { data } = useQuery<BookType[] | undefined>(
-            'books', 
-            getBooks
+    const { isLoading, isFetching, isError, isLoadingError, data } = useQuery<BookType[] | undefined>(
+        'books', 
+        getBooks
     )
-    
-    let page
-    
-     if (data?.map === undefined) {
-        page = (
-            <h3 style={{color: "red", textAlign: "center"}}>
-                Empty bookshelf
-            </h3>
+
+    let msg
+
+    if (isLoading) {
+        msg = (
+            <div className="alert alert-warning text-center" role="alert">
+                Wait, Loading ...
+            </div>
         )
-    } else {
-        page = (
+    }
+
+    if (isLoadingError || isError) {
+        return (
+            <div className="alert alert-danger text-center" role="alert">
+                No books found! Please try adding book to this section or refresh this page.
+            </div>
+        )
+    }
+
+    let grid
+    if (isFetching) {
+        msg = (
+            <div className="alert alert-warning text-center" role="alert">
+                Wait, background refresh is in progress ....
+            </div>
+        )
+    } else (
+        grid = (
             <Grid container spacing={2}>
                 {data?.map(book => (
                 <Grid item key={book.id} xs={12} sm={2}>
@@ -33,12 +50,13 @@ const Home = () => {
                 ))}
             </Grid>
         )
-    }
+    )
 
     return (
-        <div>
-            {page}
-        </div>
+        <>
+            {msg}
+            {grid}
+        </>  
     )
 }
 

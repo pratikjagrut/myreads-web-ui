@@ -11,18 +11,18 @@ const Register = () => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-       const response = await fetch('http://localhost:8000/api/register', {
+        var user = new FormData()
+        user.append("name", name)
+        user.append("email", email)
+        user.append("password", password)
+
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/register`, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                "name": name,
-                "email": email,
-                "password": password
-            })
+            body: user,
         });
 
         const content = await response.json()
-
+        
         if (content.status !== 200) {
             setError((
                 <div className="alert alert-danger" role="alert">
@@ -35,7 +35,6 @@ const Register = () => {
                 <></>
             ))
         }
-        setRedirect(true);
     }
 
     if (redirect) {
@@ -49,19 +48,19 @@ const Register = () => {
             <form onSubmit={submit}>
                 <div className="form-floating">
                     <input type="text" className="form-control" required 
-                        onChange={e => setName(e.target.value)}
+                        onChange={e => setName(e.target.value)} id="name"
                     />
                     <label>Name</label>
                 </div>
                 <div className="form-floating">
                     <input type="email" className="form-control" required 
-                        onChange={e => setEmail(e.target.value)}
+                        onChange={e => setEmail(e.target.value)} id="email"
                     />
                     <label>Email address</label>
                 </div>
                 <div className="form-floating">
                     <input type="password" className="form-control" required 
-                        onChange={e => setPassword(e.target.value)}
+                        onChange={e => setPassword(e.target.value)} id="password"
                     />
                     <label>Password</label>
                 </div>

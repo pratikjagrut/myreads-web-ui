@@ -1,7 +1,7 @@
 import { useState, SyntheticEvent } from "react"
 import { Redirect } from "react-router"
 
-const Login = (props: { setStatus: (status: number) => void }) => {
+const Login = (props: { setAuth: (auth: string | null) => void }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [redirect, setRedirect] = useState(false)
@@ -10,29 +10,42 @@ const Login = (props: { setStatus: (status: number) => void }) => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault()
 
-        const response = await fetch('http://localhost:8000/api/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-            body: JSON.stringify({
-                "email": email,
-                "password": password
-            })
-        })
+        var user = new FormData()
+        user.append("email", email)
+        user.append("password", password)
 
-        const content = await response.json()
-        
-        if (content.status !== 200) {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
+                method: 'POST',
+                credentials: 'include',
+                body: user,
+            })
+
+            const content = await response.json()
+            
+            if (content.status !== 200) {
+                localStorage.setItem("auth", "false")
+                props.setAuth("false")
+                setError((
+                    <div className="alert alert-danger" role="alert">
+                        {content.message}
+                    </div>
+                ))
+            } else {
+                setRedirect(true)
+                localStorage.setItem("auth", "true")
+                props.setAuth("true")
+                setError((
+                    <></>
+                ))
+            }
+        }
+        catch (error) {
+            console.error(error)
             setError((
                 <div className="alert alert-danger" role="alert">
-                    {content.message}
+                    Something went wrong, please try after some time.
                 </div>
-            ))
-        } else {
-            setRedirect(true)
-            props.setStatus(200)
-            setError((
-                <></>
             ))
         }
     }
@@ -48,7 +61,7 @@ const Login = (props: { setStatus: (status: number) => void }) => {
             <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
             <div className="form-floating">
                 <input type="email" className="form-control" required 
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={e => setEmail(e.target.value)} id="email"
                 />
                 <label>Email address</label>
             </div>

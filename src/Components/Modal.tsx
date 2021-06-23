@@ -4,73 +4,66 @@ import { BookType } from '../Book/Book'
 import UpdateForm from '../Components/UpdateForm'
 
 const MyModal = (props: {show: boolean, book: BookType, setShow: (status: boolean) => void }) => {
-    const handleClose = () => props.setShow(false);
     const [reload, setReload] = useState(false)
-    const [error, setError] = useState(<></>)
+    // const [error, setError] = useState(<></>)
     const bookId = props.book.id
     const bookName = props.book.name
+    
+    const handleClose = () => {
+        props.setShow(false);
+        if (reload) {
+            window.location.reload()
+        }
+    }
 
     const deleteBook = async (e: SyntheticEvent) => {
-      e.preventDefault()
+        e.preventDefault()
 
-      if (window.confirm("Are you sure?")) {
-        const response = await fetch('http://localhost:8000/api/books/deletebook', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',
-            body: JSON.stringify({
-                "id": bookId,
-                "name": bookName
-            })
-        });
+        if (window.confirm("Do you want to delete this book?")) {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/deletebook`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({
+                  "id": bookId,
+                  "name": bookName
+                })
+            });
 
-        const content = await response.json();
+            const content = await response.json();
 
-        if (content.status !== 200) {
-            setError((
-                <div className="alert alert-danger" role="alert">
-                    {content.message}
-                </div>
-            ))
-            window.location.reload()
-        } else {
-            setError((
-                <div className="alert alert-warning" role="alert">
-                    {content.message}
-                </div>
-            ))
+            if (content.status !== 200) {
+              window.alert(content.message)
+            } else {
+              window.alert(content.message)
+              setReload(true)
+            }
         }
-      }
-
-      if (reload) {
-        window.location.reload()
-      }
     }
 
     return (
         <Modal
-          show={props.show}
-          onHide={handleClose}
-          backdrop="static"
-          keyboard={false}
+            show={props.show}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
         >
-          <Modal.Header>
-            <Modal.Title>
-                <i>{bookName}</i>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-          {error}
-            <b><i>Book Status: {props.book.status.toUpperCase()}</i></b>
-            <pre></pre>
-            <UpdateForm bookId={bookId} setReload={setReload}/>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="danger" onClick={deleteBook}>Delete Book</Button>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-          </Modal.Footer>
+            <Modal.Header>
+                <Modal.Title>
+                    <i>{bookName}</i>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <b><i>Book Status: {props.book.status.toUpperCase()}</i></b>
+                <pre></pre>
+                <UpdateForm bookId={bookId} setReload={setReload}/>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="danger" onClick={deleteBook}>Delete Book</Button>
+                <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
         </Modal>
     );
 }

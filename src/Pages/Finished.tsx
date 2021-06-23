@@ -3,42 +3,60 @@ import { useQuery } from "react-query";
 import Book, { BookType } from '../Book/Book'
 
 const getBooks = async (): Promise<BookType[]> => 
-    await (await fetch('http://localhost:8000/api/books/finished', {
+    await (await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/finished`, {
         headers: {'Content-Type': 'application/json'},
         credentials: 'include',
-    })).json()
+})).json()
 
 const Finished = () => {
     
-    const { data } = useQuery<BookType[]>(
-            'books', 
-            getBooks
+    const { isLoading, isFetching, isLoadingError, isError, data } = useQuery<BookType[] | undefined>(
+        'books', 
+        getBooks
     )
-    
-    let page
-    
-     if (data?.map === undefined) {
-        page = (
-            <h3 style={{color: "red", textAlign: "center"}}>
-                Empty bookshelf
-            </h3>
+
+    let msg
+
+    if (isLoading) {
+        msg = (
+            <div className="alert alert-warning text-center" role="alert">
+                Wait, Loading ...
+            </div>
         )
-    } else {
-        page = (
+    }
+
+    if (isLoadingError || isError) {
+        return (
+            <div className="alert alert-danger text-center" role="alert">
+                No books found! Please try adding book to this section or refresh this page.
+            </div>
+        )
+    }
+
+    let grid
+    if (isFetching) {
+        msg = (
+            <div className="alert alert-warning text-center" role="alert">
+                Wait, background refresh is in progress ....
+            </div>
+        )
+    } else (
+        grid = (
             <Grid container spacing={2}>
                 {data?.map(book => (
-                <Grid item key={book.id} xs={6} sm={2}>
+                <Grid item key={book.id} xs={12} sm={2}>
                     <Book book={book}/>
                 </Grid>
                 ))}
             </Grid>
         )
-    }
+    )
 
     return (
-        <div>
-            {page}
-        </div>
+        <>
+            {msg}
+            {grid}
+        </>  
     )
 }
 

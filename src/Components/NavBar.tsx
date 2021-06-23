@@ -1,19 +1,22 @@
-import {Link} from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
-const Nav = (props: { status: number, setStatus: (status: number) => void }) => {
+const Nav = (props: { auth: string | null, setAuth: (auth: string | null) => void }) => {
     const logout = async () => {
-        await fetch('http://localhost:8000/api/logout', {
+        await fetch(`${process.env.REACT_APP_API_BASE_URL}/logout`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
         });
 
-        props.setStatus(404);
+        localStorage.setItem("auth", "false")
+        localStorage.clear()
+        props.setAuth("false");
+        <Redirect to="/" />
     }
 
     let menu;
 
-    if (props.status !== 200) {
+    if (props.auth === "false" || props.auth === null) {
         menu = (
             <div className="collapse navbar-collapse" id="navbarCollapse">
                 <ul className="navbar-nav ms-auto">
@@ -48,7 +51,7 @@ const Nav = (props: { status: number, setStatus: (status: number) => void }) => 
                 </ul>
                 <ul className="navbar-nav ms-auto">
                     <li className="nav-item">
-                        <Link to="/" className="nav-link" onClick={logout}>Logout</Link>
+                        <Link to="" className="nav-link" onClick={logout}>Logout</Link>
                     </li>
                 </ul>
             </div>
