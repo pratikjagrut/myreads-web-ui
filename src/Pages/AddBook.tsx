@@ -2,7 +2,8 @@ import { useState, SyntheticEvent } from "react";
 const AddBook = () => {
     const [name, setName] = useState('')
     const [author, setAuthor] = useState('')
-    const [status, setStatus] = useState('reading')
+    const [description, setDescription] = useState('')
+    const [status, setStatus] = useState('wishlist')
     const [image, setImage] = useState<FileList | null>()
     const [error, setError] = useState(<></>)
 
@@ -12,8 +13,8 @@ const AddBook = () => {
         book.append("name", name)
         book.append("status", status)
         book.append("author", author)
+        book.append("description", description)
         book.append("image", image![0])
-        console.log(book)
         
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/add`, {
@@ -72,13 +73,18 @@ const AddBook = () => {
                             />
                         </div>
                         <div className="col-md-12">
-                        <label className="form-label">Reading status</label>
-                        <select className="form-select" defaultValue="reading" required 
+                        <label className="form-label">Add to</label>
+                        <select className="form-select" defaultValue="wishlist" required 
                             onChange={e => setStatus(e.target.value)}>
-                            <option value="reading">Reading</option>
-                            <option value="finished">Finished</option>
-                            <option value="wishlist">Wishlist</option>
+                            <option value="wishlist">Wish List</option>
+                            <option value="reading">Reading List</option>
+                            <option value="finished">Finished List</option>
                         </select>
+                        </div>
+                        <div className="col-12">
+                            <label className="form-label">Book Description</label>
+                            <textarea rows={5} cols={50} className="form-control" required 
+                            value={description} onChange={e => setDescription(e.target.value)}/>
                         </div>
                         <div className="col-12">
                             <label className="form-label">Choose an image for thumbnail</label>
@@ -87,7 +93,7 @@ const AddBook = () => {
                             />
                         </div>
                         <div className="col-12">
-                            <button type="submit" className="btn btn-primary">Add Book</button>
+                            <button type="submit" className="btn btn-primary float-end">Add Book</button>
                         </div>
                     </form>
                 </div>
