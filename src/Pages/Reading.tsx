@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import Book, { BookType } from '../Book/Book'
 
 const getBooks = async (): Promise<BookType[]> => 
-    await (await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/reading`, {
+    await (await fetch(`${process.env.REACT_APP_API_URL}/api/books/reading`, {
         headers: {'Content-Type': 'application/json'},
         credentials: 'include',
 })).json()
@@ -45,7 +45,7 @@ const Reading = () => {
             <Grid container spacing={2}>
                 {data?.map(book => (
                 <Grid item key={book.id} xs={12} sm={2}>
-                    <Book book={book}/>
+                    <Book book={book} showStatus={false}/>
                 </Grid>
                 ))}
             </Grid>

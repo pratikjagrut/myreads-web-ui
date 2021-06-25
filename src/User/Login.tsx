@@ -15,7 +15,7 @@ const Login = (props: { setAuth: (auth: string | null) => void }) => {
         user.append("password", password)
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/login`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/login`, {
                 method: 'POST',
                 credentials: 'include',
                 body: user,

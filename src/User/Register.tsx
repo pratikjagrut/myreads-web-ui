@@ -16,7 +16,7 @@ const Register = () => {
         user.append("email", email)
         user.append("password", password)
 
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/register`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register`, {
             method: 'POST',
             body: user,
         });

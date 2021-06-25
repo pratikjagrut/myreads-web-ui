@@ -17,7 +17,7 @@ const AddBook = () => {
         book.append("image", image![0])
         
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/add`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/add`, {
                 method: 'POST',
                 credentials: 'include',
                 body: book,
@@ -40,6 +40,7 @@ const AddBook = () => {
                 ))
                 setName('')
                 setAuthor('')
+                setDescription('')
             }
         }
         catch (error) {

@@ -21,16 +21,18 @@ function App() {
                     const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/user`, {
                         headers: {'Content-Type': 'application/json'},
                         credentials: 'include',
-                    });
+                    })
 
-                    const content = await response.json();
+                    const content = await response.json()
                     setStatus(content.status)
                     if (status === 200) {
                         localStorage.setItem("auth", "true")
+                    } else {
+                        localStorage.setItem("auth", "false")
                     }
                 }
                 catch (error){
-                    localStorage.setItem("auth", "false")
+                    console.log(error)
                 }
             }
         )();

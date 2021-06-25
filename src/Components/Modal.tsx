@@ -20,7 +20,7 @@ const MyModal = (props: {show: boolean, book: BookType, setShow: (status: boolea
         book.append("id", props.book.id)
         book.append("image", props.book.image)
         if (window.confirm("Do you want to delete this book?")) {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/deletebook`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/deletebook`, {
                 method: 'POST',
                 credentials: 'include',
                 body: book
@@ -53,19 +53,21 @@ const MyModal = (props: {show: boolean, book: BookType, setShow: (status: boolea
                 }}
             >
                 <Modal.Title>
-                <h2><b>
-                    <i>{props.book.name} by {props.book.author}</i>
-                </b></h2>
+                <h3><b>
+                    <i>{props.book.name}</i>
+                </b></h3>
+                <i>by {props.book.author.toUpperCase()}</i>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="col">
                     <div className="row">
-                        <div className="col-md-6">
-                            <img src={`${process.env.REACT_APP_API_BASE_URL}/static/${props.book.image}`} className="img" alt={props.book.name} />
+                        <div className="col-md-5">
+                            <img src={`${process.env.REACT_APP_API_URL}/api/static/${props.book.image}`} className="img" alt={props.book.name} />
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-7">
                         <h3>About book</h3>
+                        {/* <textarea rows={20} cols={45} defaultValue={props.book.description}/> */}
                         <p>{props.book.description}</p>      
                         <b style={{textTransform: 'capitalize'}}>Reading Status: <i>{props.book.status}</i></b>
                         </div>

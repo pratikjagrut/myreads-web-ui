@@ -1,5 +1,7 @@
 # build environment
 FROM node:16.3.0-alpine as build
+ARG API_URL=http://localhost:8000
+ENV REACT_APP_API_URL=${API_URL}
 WORKDIR /app
 COPY . ./
 RUN yarn

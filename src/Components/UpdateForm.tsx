@@ -11,7 +11,7 @@ const UpdateForm = (props: {book: BookType, setReload: (reload: boolean) => void
         book.append("id", props.book.id)
         book.append("status", bookStatus)
         if (window.confirm(`Do you want to move this book to ${bookStatus}?`)) {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/books/updatestatus`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/updatestatus`, {
                 method: 'POST',
                 credentials: 'include',
                 body: book

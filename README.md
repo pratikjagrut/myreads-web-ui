@@ -1,47 +1,61 @@
+# Myreads
+
+Myreads is a web-based application that lets you manage your bookshelf digitally.
+Here you can maintain the status of the books in three categories.
+
+```
+1. Wish List: Books which you want to read.
+2. Reading List: Books you're currently reading.
+3. Finished List: Books you finished reading.
+```
+
 # myreads-web-ui
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a UI for Myreads application.
 
-## Available Scripts
+This projects make requests to following APIs on API_URL you provide while building container image of this project.
 
-In the project directory, you can run:
+```
+1. /api/register: For user registration.
+2. /api/login: For use login.
+3. /api/user: To fetch the logged-in user information.
+4. /api/logout: To log out the user.
+5. /api/books/add: To add book the database.
+6. /api/books/all: To fetch all the books.
+7. /api/books/reading: To fetch books from the reading list.
+8. /api/books/wishlist: To fetch books from wishlist.
+9. /api/books/finished: To fetch books from the finished list.
+10. /api/books/deletebook: To delete book
+11. /api/books/updatestatus: To update the status of the books such as reading->finished.
+12. /api/static: To fetch the static content such as the image.
+```
 
-### `yarn start`
+## Start the server
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To run the server, make sure you've docker installed.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Clone the repo
 
-### `yarn test`
+```sh
+git clone https://github.com/pratikjagrut/myreads-web-ui.git
+```
+### Build container image
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```sh
+docker build -t myreads-ui --build-arg API_URL=http://localhost:8000 .
+```
 
-### `yarn build`
+### Run container
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```sh
+docker run -d -p 3000:80 myreads-ui
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Hit the http://localhost:3000 in browser to access the application.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Screenshots
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+![Home Page](screenshots/Screenshot%20from%202021-06-26%2002-52-18.png)
+![Login Page](screenshots/Screenshot%20from%202021-06-26%2002-52-34.png)
+![Register page](screenshots/Screenshot%20from%202021-06-26%2002-52-37.png)
+![Add book page](screenshots/Screenshot%20from%202021-06-26%2002-52-30.png)

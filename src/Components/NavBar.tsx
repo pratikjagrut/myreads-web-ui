@@ -2,7 +2,7 @@ import { Link, Redirect } from "react-router-dom";
 
 const Nav = (props: { auth: string | null, setAuth: (auth: string | null) => void }) => {
     const logout = async () => {
-        await fetch(`${process.env.REACT_APP_API_BASE_URL}/logout`, {
+        await fetch(`${process.env.REACT_APP_API_URL}/api/logout`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
