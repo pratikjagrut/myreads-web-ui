@@ -1,0 +1,70 @@
+version: v1beta11
+
+vars:
+- name: IMAGE
+  value: pratikjagrut/myreads-web-ui
+
+images:
+  frontend:
+    image: ${IMAGE}
+
+deployments:
+- name: myreads-web-ui
+  helm:
+    componentChart: true
+    values:
+      containers:
+      - image: ${IMAGE}
+      service:
+        ports:
+        - port: 8080
+          containerPort: 80
+        type: LoadBalancer
+
+dev:
+  ports:
+  - imageSelector: ${IMAGE}
+    forward:
+    - port: 8080
+
+  open:
+  - url: http://localhost:8080
+
+  sync:
+  - imageSelector: ${IMAGE}
+    excludePaths:
+    - .git/
+    - node_modules
+    - build
+    - .dockerignore
+    - Dockerfile
+    - README.md
+    - screenshots
+
+  terminal:
+    imageSelector: ${IMAGE}
+    command:
+    - ./devspace_start.sh
+
+  replacePods:
+  - imageSelector: ${IMAGE}
+    replaceImage: loftsh/alpine:latest
+    patches:
+    - op: replace
+      path: spec.containers[0].command
+      value:
+      - sleep
+    - op: replace
+      path: spec.containers[0].args
+      value:
+      - "9999999"
+    - op: remove
+      path: spec.containers[0].securityContext
+
+profiles:
+- name: production
+  merge:
+    images:
+      app:
+        image: ${IMAGE}
+        dockerfile: ./Dockerfile
